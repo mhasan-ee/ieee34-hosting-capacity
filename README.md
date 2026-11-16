@@ -1,4 +1,4 @@
-﻿# DER Interconnection \& PV Hosting Capacity Study — IEEE 34-Bus Feeder
+# DER Interconnection & PV Hosting Capacity Study — IEEE 34-Bus Feeder
 
 Full-year, hourly PV hosting capacity study on the IEEE 34-node test feeder using OpenDSS (via OpenDSSDirect.py), with IEEE 1547-2018 smart inverter functions, a fault study, and interconnection screens.
 
@@ -22,9 +22,9 @@ Full-year, hourly PV hosting capacity study on the IEEE 34-node test feeder usin
 * **Limiting factor:** overvoltage at bus 814, the end of the 20-mile unregulated section before regulator RG10. Thermal loading never exceeded 91.9%.
 * **Fault study:** PV (1.2 × rated current) raises the 3-phase fault current at bus 848 from 247.8 A to at most 280.6 A. All sizes fail the 10% fault-current and 15%-of-peak-load (265 kW) fast-track screens, which is why a detailed study is needed.
 
-!\[Hosting capacity by inverter mode](fig\_step4\_hosting\_capacity.png)
+![Hosting capacity by inverter mode](fig_step4_hosting_capacity.png)
 
-!\[One-line diagram](fig\_step6\_one\_line.png)
+![One-line diagram](fig_step6_one_line.png)
 
 ## Method
 
@@ -45,34 +45,34 @@ Full-year, hourly PV hosting capacity study on the IEEE 34-node test feeder usin
 
 |Path|What it is|
 |-|-|
-|`run\_powerflow.py`|Step 1: first power flow (convergence, totals, min/max voltage)|
-|`compare\_ieee.py`|Step 2: validation vs IEEE (`python compare\_ieee.py ieee` locks IEEE taps)|
-|`hosting\_capacity.py`|Steps 3–4: yearly hosting capacity sweep (unity / `vv` / `pf95`)|
-|`make\_fig\_step4.py`|Step 4: hosting capacity summary figure|
-|`fault\_study.py`|Step 5: fault currents and interconnection screens|
-|`one\_line.py`|Step 6: one-line diagram drawn from the OpenDSS model (PNG + PDF)|
+|`run_powerflow.py`|Step 1: first power flow (convergence, totals, min/max voltage)|
+|`compare_ieee.py`|Step 2: validation vs IEEE (`python compare_ieee.py ieee` locks IEEE taps)|
+|`hosting_capacity.py`|Steps 3–4: yearly hosting capacity sweep (unity / `vv` / `pf95`)|
+|`make_fig_step4.py`|Step 4: hosting capacity summary figure|
+|`fault_study.py`|Step 5: fault currents and interconnection screens|
+|`one_line.py`|Step 6: one-line diagram drawn from the OpenDSS model (PNG + PDF)|
 |`34Bus/`|EPRI OpenDSS IEEE 34-bus model files|
 |`profiles/`|Hourly load shape and PVWatts PV profile|
-|`ieee\_published/`|IEEE feeder data and extracted published voltages|
-|`results\_\*.csv`, `fig\_\*.png`|Outputs of each step|
+|`ieee_published/`|IEEE feeder data and extracted published voltages|
+|`results_*.csv`, `fig_*.png`|Outputs of each step|
 
 ## How to reproduce (Windows, Python 3.12)
 
 ```
 py -3.12 -m venv .venv
-.venv\\Scripts\\Activate.ps1
+.venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 
-python run\_powerflow.py
-python compare\_ieee.py
-python compare\_ieee.py ieee
-python hosting\_capacity.py                   # unity PF, 1.03 pu source
-python hosting\_capacity.py 848 1.03 50 vv    # IEEE 1547 volt-var
-python hosting\_capacity.py 848 1.03 50 pf95  # 0.95 PF absorbing
-python hosting\_capacity.py 848 1.05          # IEEE's 1.05 pu source
-python make\_fig\_step4.py
-python fault\_study.py
-python one\_line.py
+python run_powerflow.py
+python compare_ieee.py
+python compare_ieee.py ieee
+python hosting_capacity.py                   # unity PF, 1.03 pu source
+python hosting_capacity.py 848 1.03 50 vv    # IEEE 1547 volt-var
+python hosting_capacity.py 848 1.03 50 pf95  # 0.95 PF absorbing
+python hosting_capacity.py 848 1.05          # IEEE's 1.05 pu source
+python make_fig_step4.py
+python fault_study.py
+python one_line.py
 ```
 
 Each hosting capacity run takes about 20–50 s.
