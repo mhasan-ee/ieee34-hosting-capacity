@@ -1,0 +1,3 @@
+source_pu,light_hr,light_vmax_pu,light_node,peak_hr,peak_vmin_pu,peak_node,v814a_peak_pu,nodes_below_095_at_peak,hours_814_below_095
+1.05,6935,1.0528,814.2,5318,0.9231,890.3,0.9464,4,14
+1.03,6935,1.0328,814.2,5318,0.9241,814.1,0.9241,4,296

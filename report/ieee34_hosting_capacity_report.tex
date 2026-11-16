@@ -69,7 +69,9 @@ Category B volt-var} and 1{,}050\,kW at a fixed 0.95 power factor (absorbing). E
 overvoltage at bus 814, the end of the 20-mile unregulated section ahead of the first line regulator, and a
 simple $\Delta V \approx (PR-QX)/V^2$ estimate predicted the measured voltage slope within 4\,\% and the gain from
 reactive power within 1\,\%. Lowering the substation setpoint from IEEE's \SI{1.05}{pu} to \SI{1.03}{pu}
-raised hosting capacity eightfold (100 to 800\,kW). A fault study showed the PV adds at most 13\,\% to the
+raised hosting capacity eightfold (100 to 800\,kW), but a fixed 1.03\,pu setting lowers bus 814 below
+0.95\,pu for 296 hours a year at heavy load (14 hours at 1.05\,pu), so in practice the setpoint would have to follow
+the load. A fault study showed the PV adds at most 13\,\% to the
 end-of-line fault current, and all sizes fail the 10\,\% fault-current and 15\,\%-of-peak-load fast-track screens,
 showing why detailed studies are needed on long feeders.
 \end{abstract}
@@ -362,29 +364,41 @@ The critical condition for overvoltage is not the minimum load of the year but t
         or transformer loading over the year are recorded, with the hour and location.
   \item The first size that violates a limit ends the sweep; the largest passing size is the hosting
         capacity. A 0.0001\,pu tolerance removes floating-point round-off.
-  \item Existing undervoltages at 814 A (0.947\,pu) and 890 (about 0.92\,pu) at peak load are excluded,
-        because PV cannot make them worse.
+  \item Undervoltages are excluded from the hosting capacity check, because PV cannot make them worse.
+        They are reported separately in Section~\ref{sec:setpoint} (bus 814 phase A and the 4.16\,kV bus 890
+        at peak load).
   \item Every one of the 4{,}264 hourly solutions converged in every run.
 \end{enumerate}
 
-\subsection{Choice of substation setpoint}
-IEEE fixes the source at 1.05\,pu, a peak-load setting. At the lightest-load hour this alone puts bus 814
-above the limit with no PV at all (Table~\ref{tab:source}). The study therefore uses 1.03\,pu, a typical
-substation LTC setpoint. Peak-load voltages are essentially unchanged because the line regulators raise
-their taps to compensate.
+\subsection{Choice of substation setpoint}\label{sec:setpoint}
+IEEE fixes the source at 1.05\,pu, a peak-load setting. At the lightest-load hour of the year (11\,PM, Oct 16)
+this alone puts bus 814 above the limit with no PV at all (Table~\ref{tab:source}). The study therefore uses
+1.03\,pu, a typical substation LTC setpoint.
+
+This choice has a cost. Bus 814 is on the source side of RG10, so only the substation sets its voltage:
+lowering the source by 0.02\,pu lowers bus 814 by about the same amount in every hour. At peak load, phase A
+at bus 814 drops from 0.946\,pu to 0.924\,pu, and over the whole year bus 814 is below 0.95\,pu for 296 hours
+instead of 14. Buses beyond the line regulators are barely affected, because RG10 and RG11 raise their taps
+to compensate. A single fixed setpoint therefore cannot keep this feeder inside Range A at both light and
+heavy load. In practice the substation LTC would raise its voltage with load (line-drop compensation or a
+load-dependent schedule). That would remove most of the undervoltage hours, but it would also lower the
+hosting capacity found here, because the limiting hours (spring middays at about 40\,\% load) would see a
+slightly higher sending voltage. The 1.03\,pu results below are therefore the hosting capacity for that
+setpoint, not a final operating recommendation.
 
 \begin{table}[H]
 \centering
 \small
-\begin{tabular}{@{}lccc@{}}
+\begin{tabular}{@{}lcccc@{}}
 \toprule
-Source setting & Light load (hr 6935): max $V$ & Peak load (hr 5318): min $V$ & Nodes $<0.95$ at peak \\
+Source & Light load (hr 6935) & Peak load (hr 5318) & Bus 814 A & Hours/yr with \\
+setting & max $V$ (pu) & min $V$ (pu) & at peak (pu) & 814 $<0.95$\,pu \\
 \midrule
-1.05\,pu (IEEE) & \textbf{1.0528 at 814.2} & 0.9231 & 4 \\
-1.03\,pu (this study) & 1.0328 at 814.2 & 0.9241 & 4 \\
+1.05\,pu (IEEE) & \textbf{1.0528 at 814.2} & 0.9231 at 890.3 & 0.946 & 14 \\
+1.03\,pu (this study) & 1.0328 at 814.2 & 0.9241 at 814.1 & \textbf{0.924} & \textbf{296} \\
 \bottomrule
 \end{tabular}
-\caption{Effect of the substation setpoint with no PV.}
+\caption{Effect of the substation setpoint with no PV, over all 8{,}760 hours (\texttt{setpoint\_check.py}).}
 \label{tab:source}
 \end{table}
 
@@ -567,7 +581,9 @@ study was worth doing.
         before comparing networks reduced the error tenfold.
   \item \textbf{The IEEE base case is a peak-load case.} Its 1.05\,pu source already violates Range A at light
         load with no PV. Checking the no-PV case over the whole year before adding PV caught this, and the
-        setpoint turned out to be the largest single lever on hosting capacity.
+        setpoint turned out to be the largest single lever on hosting capacity. Lowering it, however, moved the
+        problem to undervoltage at bus 814 at heavy load (296\,h/yr): with an unregulated section at the head of
+        the feeder, one fixed setpoint cannot meet both limits.
   \item \textbf{Round-off error.} An early version of the script reported the 0\,kW case as a failure at
         ``1.0500\,pu'': bus 800 sat a hair above 1.05\,pu because of round-off. A 0.0001\,pu tolerance fixed it.
   \item \textbf{Placeholder data.} OpenDSS gives every line a 400\,A rating unless told otherwise. Without real
@@ -587,6 +603,9 @@ study was worth doing.
 % =====================================================================
 \section{Limitations and Future Work}
 \begin{itemize}
+  \item \textbf{Fixed substation setpoint:} the 1.03\,pu source is held all year, which leaves bus 814 below
+        0.95\,pu for 296\,h/yr at heavy load. A load-dependent LTC schedule would fix this but lower the hosting
+        capacity; repeating the sweeps with such a schedule is the most important next step.
   \item \textbf{One location:} PV was studied only at bus 848. A hosting capacity map over all three-phase buses
         would show where PV fits best (PV upstream of RG10 would likely behave very differently).
   \item \textbf{One load shape for all loads:} real feeders mix residential and commercial customers.
@@ -607,7 +626,8 @@ published bus voltages within 0.14\,\%. A full-year, hourly study found a PV hos
 800\,kW at unity power factor, 900\,kW with IEEE 1547-2018 volt-var and 1{,}050\,kW at a fixed 0.95 power
 factor. In every case the limit was overvoltage at the end of the unregulated section, and a simple
 $(PR-QX)/V^2$ estimate reproduced both the voltage slope and the benefit of each inverter mode. The
-substation setpoint mattered more than any inverter setting, and fast-track screens would have allowed only a
+substation setpoint mattered more than any inverter setting, but a fixed 1.03\,pu setting trades light-load
+overvoltage for heavy-load undervoltage at bus 814, so in practice the setpoint must follow the load. Fast-track screens would have allowed only a
 third of the capacity the detailed study supports. The project showed in practice how regulators, reverse
 power flow and local inverter control interact on a long rural feeder, and how a utility interconnection
 study moves from model validation to time-series analysis, protection checks and screens.
@@ -661,6 +681,7 @@ python make_fig_step4.py
 python fault_study.py                         # Step 5
 python one_line.py                            # Step 6
 python report_figures.py                      # extra report figures
+python setpoint_check.py                      # substation setpoint trade-off
 \end{lstlisting}
 Each hosting capacity run takes about 20--50\,s on a laptop.
 
@@ -678,6 +699,7 @@ Nov 14 & 3 & Profiles checked (8{,}760 h). 1.05\,pu source gives 1.0528\,pu at 8
 Nov 14--15 & 4 & Volt-var 900\,kW; 0.95 PF 1{,}050\,kW; 1.05\,pu source 100\,kW \\
 Nov 15 & 5 & $I_{sc}$ at 848 = 247.8\,A; PV adds 24.9--32.7\,A (10.1--13.2\,\%); both screens fail \\
 Nov 15 & 6--8 & One-line diagram from the model; README; public GitHub repository \\
+Nov 15 & -- & Setpoint check: fixed 1.03\,pu puts bus 814 below 0.95\,pu for 296\,h/yr (14\,h at 1.05\,pu); trade-off documented \\
 \bottomrule
 \end{tabular}
 \caption{Running log of the study.}

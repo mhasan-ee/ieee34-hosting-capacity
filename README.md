@@ -21,6 +21,7 @@ Full-year, hourly PV hosting capacity study on the IEEE 34-node test feeder usin
 * **Validation:** bus voltages match IEEE published results within **0.14%** (mean 0.06%, 92/92 bus-phases within 1%) with regulator taps matched; substation kW within 0.6%.
 * **Limiting factor:** overvoltage at bus 814, the end of the 20-mile unregulated section before regulator RG10. Thermal loading never exceeded 91.9%.
 * **Fault study:** PV (1.2 × rated current) raises the 3-phase fault current at bus 848 from 247.8 A to at most 280.6 A. All sizes fail the 10% fault-current and 15%-of-peak-load (265 kW) fast-track screens, which is why a detailed study is needed.
+* **Setpoint trade-off:** the 1.03 pu substation setting that allows 800 kW also puts bus 814 below 0.95 pu for 296 hours a year at heavy load (14 hours at IEEE's 1.05 pu). In practice the substation voltage would have to rise with load, which would lower these hosting capacities.
 
 ![Hosting capacity by inverter mode](fig_step4_hosting_capacity.png)
 
@@ -37,8 +38,9 @@ Full-year, hourly PV hosting capacity study on the IEEE 34-node test feeder usin
 
 ### Key assumptions
 
-* Substation source set to **1.03 pu**. IEEE's 1.05 pu (a peak-load setting) puts bus 814 at 1.0528 pu at minimum load with no PV. Results at 1.05 pu are reported for comparison.
-* Existing undervoltages (814 A ≈ 0.947 pu, 890 ≈ 0.92 pu at peak) are excluded because PV cannot worsen them.
+* Substation source set to **1.03 pu** all year. IEEE's 1.05 pu (a peak-load setting) puts bus 814 at 1.0528 pu at the lightest-load hour (11 PM, Oct 16) with no PV. Results at 1.05 pu are reported for comparison.
+* Trade-off of the fixed 1.03 pu setting: bus 814 (before regulator RG10, so set only by the substation) drops from 0.946 to 0.924 pu at peak load, below 0.95 pu for 296 h/yr instead of 14 (`setpoint_check.py`).
+* Undervoltages (bus 814 phase A and the 4.16 kV bus 890 at peak load) are excluded from the hosting capacity check because PV cannot worsen them; they are reported separately.
 * Line ratings from standard ACSR ampacities (1/0: 230 A, #2: 180 A, #4: 140 A); the IEEE model leaves them at a 400 A placeholder.
 
 ## Repository layout
@@ -51,6 +53,9 @@ Full-year, hourly PV hosting capacity study on the IEEE 34-node test feeder usin
 |`make_fig_step4.py`|Step 4: hosting capacity summary figure|
 |`fault_study.py`|Step 5: fault currents and interconnection screens|
 |`one_line.py`|Step 6: one-line diagram drawn from the OpenDSS model (PNG + PDF)|
+|`setpoint_check.py`|Substation setpoint trade-off: light-load overvoltage vs peak-load undervoltage (no PV)|
+|`report_figures.py`|Extra report figures (input profiles, bus 814 voltage vs PV size)|
+|`report/`|LaTeX source and PDF of the full report|
 |`34Bus/`|EPRI OpenDSS IEEE 34-bus model files|
 |`profiles/`|Hourly load shape and PVWatts PV profile|
 |`ieee_published/`|IEEE feeder data and extracted published voltages|
@@ -73,6 +78,8 @@ python hosting_capacity.py 848 1.05          # IEEE's 1.05 pu source
 python make_fig_step4.py
 python fault_study.py
 python one_line.py
+python report_figures.py
+python setpoint_check.py
 ```
 
 Each hosting capacity run takes about 20–50 s.
