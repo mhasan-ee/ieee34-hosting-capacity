@@ -1,0 +1,5 @@
+case,hosting_capacity_kw,first_fail_kw,fail_vmax_pu,fail_node,fail_hour
+Unity PF 1.05 pu source (IEEE),100,150,1.0504,814.2,7837
+Unity PF 1.03 pu source,800,850,1.051,814.3,2196
+Volt-var (IEEE 1547 Cat B),900,950,1.0501,814.3,2364
+0.95 PF absorbing,1050,1100,1.0505,814.3,2196

@@ -1,5 +1,0 @@
-pv_kw,vmax_pu,vmax_node,vmax_hour,max_loading_pct,max_loading_elem,tmax_hour,pass_
-0,1.05,800.3,7839,91.7,Transformer.xfm1,5318,True
-50,1.05,800.3,7839,91.7,Transformer.xfm1,5318,True
-100,1.05,800.3,7839,91.8,Transformer.xfm1,5318,True
-150,1.0504,814.2,7837,91.8,Transformer.xfm1,5318,False
