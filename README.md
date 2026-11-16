@@ -19,6 +19,8 @@ Full-year, hourly PV hosting capacity study on the IEEE 34-node test feeder usin
 
 ![Hosting capacity by inverter mode](fig_step4_hosting_capacity.png)
 
+![One-line diagram](fig_step6_one_line.png)
+
 ## Method
 
 1. **Model:** EPRI OpenDSS `ieee34Mod1.dss` (24.9 kV, 58.4 mi of line, 1,769 kW load, two line regulators, two capacitors).
@@ -43,6 +45,7 @@ Full-year, hourly PV hosting capacity study on the IEEE 34-node test feeder usin
 | `hosting_capacity.py` | Steps 3–4: yearly hosting capacity sweep (unity / `vv` / `pf95`) |
 | `make_fig_step4.py` | Step 4: hosting capacity summary figure |
 | `fault_study.py` | Step 5: fault currents and interconnection screens |
+| `one_line.py` | Step 6: one-line diagram drawn from the OpenDSS model (PNG + PDF) |
 | `34Bus/` | EPRI OpenDSS IEEE 34-bus model files |
 | `profiles/` | Hourly load shape and PVWatts PV profile |
 | `ieee_published/` | IEEE feeder data and extracted published voltages |
@@ -64,6 +67,7 @@ python hosting_capacity.py 848 1.03 50 pf95  # 0.95 PF absorbing
 python hosting_capacity.py 848 1.05          # IEEE's 1.05 pu source
 python make_fig_step4.py
 python fault_study.py
+python one_line.py
 ```
 
 Each hosting capacity run takes about 20–50 s.
