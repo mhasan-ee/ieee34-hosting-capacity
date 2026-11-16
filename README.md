@@ -1,12 +1,13 @@
-# DER Interconnection \& PV Hosting Capacity Study — IEEE 34-Bus Feeder
+﻿# DER Interconnection \& PV Hosting Capacity Study — IEEE 34-Bus Feeder
 
 Full-year, hourly PV hosting capacity study on the IEEE 34-node test feeder using OpenDSS (via OpenDSSDirect.py), with IEEE 1547-2018 smart inverter functions, a fault study, and interconnection screens.
 
 **Author:** Mahedi Hasan, Electrical Engineering senior, The City College of New York (CCNY)
 
+**Full technical report (18 pages):** [report/ieee34_hosting_capacity_report.pdf](report/ieee34_hosting_capacity_report.pdf)
 
 
-📄 \*\*Full technical report (18 pages):\*\* \[report/ieee34\_hosting\_capacity\_report.pdf](report/ieee34\_hosting\_capacity\_report.pdf)
+
 
 ## Key results
 
